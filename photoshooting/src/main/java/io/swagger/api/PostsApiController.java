@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,6 +33,9 @@ public class PostsApiController implements PostsApi {
     private final ObjectMapper objectMapper;
 
     private final HttpServletRequest request;
+    
+    @Autowired
+    private PostsApiService postsApiService;
 
     @org.springframework.beans.factory.annotation.Autowired
     public PostsApiController(ObjectMapper objectMapper, HttpServletRequest request) {
@@ -84,8 +88,8 @@ public class PostsApiController implements PostsApi {
                 return new ResponseEntity<Post>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-
-        return new ResponseEntity<Post>(HttpStatus.NOT_IMPLEMENTED);
+        Post post = postsApiService.getPostbyId(id);
+        return new ResponseEntity<Post>(post, HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<Comment> getPostComment(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("postId") Integer postId
@@ -110,9 +114,10 @@ public class PostsApiController implements PostsApi {
         return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Void> getPosts() {
+    public ResponseEntity<List<Post>> getPosts() {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        List<Post> posts = postsApiService.getPosts();
+        return new ResponseEntity<List<Post>>(posts, HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<Void> likePost(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id

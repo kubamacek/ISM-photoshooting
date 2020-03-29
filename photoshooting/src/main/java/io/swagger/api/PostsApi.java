@@ -130,7 +130,7 @@ public interface PostsApi {
         @ApiResponse(code = 400, message = "Bad request") })
     @RequestMapping(value = "/posts",
         method = RequestMethod.GET)
-    ResponseEntity<Void> getPosts();
+    ResponseEntity<List<Post>> getPosts();
 
 
     @ApiOperation(value = "Like post", nickname = "likePost", notes = "", tags={ "posts", })

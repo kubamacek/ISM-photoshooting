@@ -219,4 +219,16 @@ public class Post   {
     }
     return o.toString().replace("\n", "\n    ");
   }
+
+  public Post(long i, Integer likes, String title, String description, String date, String photo, String author) {
+	  super();
+	  this.id = i;
+	  this.likes = likes;
+	  this.title = title;
+	  this.description = description;
+	  this.date = date;
+	  this.photo = photo;
+	  this.author = author;
+  }
+
 }
