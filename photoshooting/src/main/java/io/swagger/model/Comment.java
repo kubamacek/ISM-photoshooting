@@ -3,43 +3,66 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
  * Comment
  */
+@Entity
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-03-29T16:53:00.885Z[GMT]")
 public class Comment   {
   @JsonProperty("id")
-  private Long id = null;
+  private Integer id = null;
 
   @JsonProperty("body")
   private String body = null;
 
   @JsonProperty("author")
   private String author = null;
+  
+  private Post post;
 
-  public Comment id(Long id) {
+  public Comment id(Integer id) {
     this.id = id;
     return this;
   }
+  
+  public Comment() {
+	super();
+  }
+
+  public Comment(Integer id, String body, String author) {
+	super();
+	this.id = id;
+	this.body = body;
+	this.author = author;
+  }	
 
   /**
    * Get id
    * @return id
   **/
-  @ApiModelProperty(value = "")
-  
-    public Long getId() {
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  public Integer getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -79,6 +102,17 @@ public class Comment   {
 
   public void setAuthor(String author) {
     this.author = author;
+  }
+  
+  @ManyToOne
+  @JoinColumn(name = "post_id")
+  @JsonIgnore
+  public Post getPost() {
+	return post;
+  }
+
+  public void setPost(Post post) {
+	this.post = post;
   }
 
 

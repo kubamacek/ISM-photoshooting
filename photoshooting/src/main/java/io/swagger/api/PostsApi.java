@@ -35,7 +35,7 @@ public interface PostsApi {
     @RequestMapping(value = "/posts",
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Void> addPost(@ApiParam(value = "Post object that needs to be created" ,required=true )  @Valid @RequestBody Post body
+    ResponseEntity<String> addPost(@ApiParam(value = "Post object that needs to be created" ,required=true )  @Valid @RequestBody Post body
 );
 
 
@@ -46,7 +46,7 @@ public interface PostsApi {
     @RequestMapping(value = "/posts/{id}/comments",
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Void> addPostComment(@ApiParam(value = "Comment object that needs to be created" ,required=true )  @Valid @RequestBody Comment body
+    ResponseEntity<String> addPostComment(@ApiParam(value = "Comment object that needs to be created" ,required=true )  @Valid @RequestBody Comment body
 ,@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
 );
 
@@ -58,7 +58,7 @@ public interface PostsApi {
         @ApiResponse(code = 404, message = "Post not found") })
     @RequestMapping(value = "/posts/{id}",
         method = RequestMethod.DELETE)
-    ResponseEntity<Void> deletePost(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
+    ResponseEntity<String> deletePost(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
 );
 
 
@@ -120,7 +120,7 @@ public interface PostsApi {
         @ApiResponse(code = 404, message = "Post not found") })
     @RequestMapping(value = "/posts/{id}/comments",
         method = RequestMethod.GET)
-    ResponseEntity<Void> getPostComments(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
+    ResponseEntity<List<Comment>> getPostComments(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
 );
 
 
@@ -151,7 +151,7 @@ public interface PostsApi {
     @RequestMapping(value = "/posts/{id}",
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> updatePost(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
+    ResponseEntity<String> updatePost(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
 ,@ApiParam(value = "Post object that needs to be updated"  )  @Valid @RequestBody Post body
 );
 

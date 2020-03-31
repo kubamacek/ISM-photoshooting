@@ -1,35 +1,35 @@
 package io.swagger.api;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.swagger.model.Comment;
 import io.swagger.model.Post;
 
 @Service
-public class PostsApiService {
-	
-	@Autowired
-    private PostsApiRepository postsApiRepository;
+public class CommentsApiService {
 
-	public List<Post> getPosts(){
-		List<Post> posts = new ArrayList<>();
-		postsApiRepository.findAll().forEach(posts::add);
-		return posts;
+	@Autowired
+	private CommentsApiRepository commentsApiRepository;
+	
+	public List<Comment> getPostComments(Integer postId){
+		List<Comment> comments = new ArrayList<>();
+		commentsApiRepository.findByPostId(postId).forEach(comments::add);
+		return comments;
 	}
 	
-	public String addPost(Post post) {
-		postsApiRepository.save(post);
-		Integer id = post.getId();
+	public String addPostComment(Comment comment) {
+		commentsApiRepository.save(comment);
+		Integer id = comment.getId();
 		String ids = id.toString();
 		return ids;
 	}
 	
-	public Post getPostbyId(Integer id) {
-		return postsApiRepository.findOne(id);
+	/*public Post getPostComment(Integer postId, Integer commentId) {
+		commentsApiRepository.findByPostId(postId)
 	}
 	
 	public String updatePost(Integer id, Post body) {
@@ -45,5 +45,6 @@ public class PostsApiService {
 	public String deletePost(Integer id) {
 		postsApiRepository.delete(id);
 		return "OK";
-	}
+	}*/
+	
 }

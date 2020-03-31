@@ -1,22 +1,32 @@
 package io.swagger.model;
 
+import java.util.List;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
  * Post
  */
+@Entity
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-03-29T16:53:00.885Z[GMT]")
 public class Post   {
   @JsonProperty("id")
-  private Long id = null;
+  private Integer id = null;
 
   @JsonProperty("likes")
   private Integer likes = null;
@@ -36,22 +46,40 @@ public class Post   {
   @JsonProperty("author")
   private String author = null;
 
-  public Post id(Long id) {
+  private List<Comment> comments;
+
+  public Post id(Integer id) {
     this.id = id;
     return this;
+  }
+  
+  public Post() {
+	super();
+	this.likes = 0;
+  }
+  
+  public Post(Integer id, Integer likes, String title, String description, String date, String photo, String author) {
+	super();
+	this.id = id;
+	this.likes = 0;
+	this.title = title;
+	this.description = description;
+	this.date = date;
+	this.photo = photo;
+	this.author = author;
   }
 
   /**
    * Get id
    * @return id
   **/
-  @ApiModelProperty(value = "")
-  
-    public Long getId() {
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  public Integer getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -168,7 +196,15 @@ public class Post   {
   public void setAuthor(String author) {
     this.author = author;
   }
+  
+  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+  public List<Comment> getComments() {
+	return comments;
+  }
 
+  public void setComments(List<Comment> comments) {
+	this.comments = comments;
+  }
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -218,17 +254,6 @@ public class Post   {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
-  }
-
-  public Post(long i, Integer likes, String title, String description, String date, String photo, String author) {
-	  super();
-	  this.id = i;
-	  this.likes = likes;
-	  this.title = title;
-	  this.description = description;
-	  this.date = date;
-	  this.photo = photo;
-	  this.author = author;
   }
 
 }

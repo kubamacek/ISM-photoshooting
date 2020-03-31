@@ -24,6 +24,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+import io.swagger.api.CommentsApiService;
+
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-03-29T16:53:00.885Z[GMT]")
 @Controller
 public class PostsApiController implements PostsApi {
@@ -36,6 +39,9 @@ public class PostsApiController implements PostsApi {
     
     @Autowired
     private PostsApiService postsApiService;
+    
+    @Autowired
+    private CommentsApiService commentsApiService;
 
     @org.springframework.beans.factory.annotation.Autowired
     public PostsApiController(ObjectMapper objectMapper, HttpServletRequest request) {
@@ -43,23 +49,27 @@ public class PostsApiController implements PostsApi {
         this.request = request;
     }
 
-    public ResponseEntity<Void> addPost(@ApiParam(value = "Post object that needs to be created" ,required=true )  @Valid @RequestBody Post body
+    public ResponseEntity<String> addPost(@ApiParam(value = "Post object that needs to be created" ,required=true )  @Valid @RequestBody Post body
 ) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+    	String accept = request.getHeader("Accept");
+        String msg = postsApiService.addPost(body);
+        return new ResponseEntity<String>(msg, HttpStatus.OK);
     }
 
-    public ResponseEntity<Void> addPostComment(@ApiParam(value = "Comment object that needs to be created" ,required=true )  @Valid @RequestBody Comment body
+    public ResponseEntity<String> addPostComment(@ApiParam(value = "Comment object that needs to be created" ,required=true )  @Valid @RequestBody Comment body
 ,@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        body.setPost(new Post(id, 0,"", "", "", "", ""));
+        String msg = commentsApiService.addPostComment(body);
+        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Void> deletePost(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
+    public ResponseEntity<String> deletePost(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        String msg = postsApiService.deletePost(id);
+        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<Void> deletePostComment(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("postId") Integer postId
@@ -108,10 +118,11 @@ public class PostsApiController implements PostsApi {
         return new ResponseEntity<Comment>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Void> getPostComments(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
+    public ResponseEntity<List<Comment>> getPostComments(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        List<Comment> comments = commentsApiService.getPostComments(id);
+        return new ResponseEntity<List<Comment>>(comments, HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<List<Post>> getPosts() {
@@ -126,11 +137,12 @@ public class PostsApiController implements PostsApi {
         return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Void> updatePost(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
+    public ResponseEntity<String> updatePost(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
 ,@ApiParam(value = "Post object that needs to be updated"  )  @Valid @RequestBody Post body
 ) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        String msg = postsApiService.updatePost(id, body);
+        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
     }
 
 }
