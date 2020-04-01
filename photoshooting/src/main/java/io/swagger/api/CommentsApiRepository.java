@@ -12,5 +12,6 @@ import io.swagger.model.Post;
 public interface CommentsApiRepository extends CrudRepository<Comment, Integer> {
 	
 	public List<Comment> findByPostId(Integer postId);
+	public Comment findByPostIdAndId(Integer postId, Integer commentId);
 
 }

@@ -28,23 +28,23 @@ public class CommentsApiService {
 		return ids;
 	}
 	
-	/*public Post getPostComment(Integer postId, Integer commentId) {
-		commentsApiRepository.findByPostId(postId)
+	public Comment getPostComment(Integer postId, Integer commentId) {
+		Comment comment = commentsApiRepository.findByPostIdAndId(postId, commentId);
+		return comment;
 	}
 	
-	public String updatePost(Integer id, Post body) {
-		Post post = postsApiRepository.findOne(id);
-		post.setAuthor(body.getAuthor());
-		post.setDate(body.getDate());
-		post.setDescription(body.getDescription());
-		post.setTitle(body.getTitle());
-		final Post updatedPost = postsApiRepository.save(post);
+	public String editPostComment(Integer PostId, Integer CommentId, Comment body) {
+		Comment comment = commentsApiRepository.findByPostIdAndId(PostId, CommentId);
+		comment.setAuthor(body.getAuthor());
+		comment.setBody(body.getBody());
+		final Comment updatedComment = commentsApiRepository.save(comment);
 		return "OK";
 	}
 	
-	public String deletePost(Integer id) {
-		postsApiRepository.delete(id);
+	public String deletePostComment(Integer postId, Integer commentId) {
+		Comment comment = commentsApiRepository.findByPostIdAndId(postId, commentId);
+		commentsApiRepository.delete(comment);
 		return "OK";
-	}*/
+	}
 	
 }

@@ -46,4 +46,13 @@ public class PostsApiService {
 		postsApiRepository.delete(id);
 		return "OK";
 	}
+	
+	public String likePost(Integer id) {
+		Post post = postsApiRepository.findOne(id);
+		Integer likes = post.getLikes();
+		likes++;
+		post.setLikes(likes);
+		postsApiRepository.save(post);
+		return "OK";
+	}
 }

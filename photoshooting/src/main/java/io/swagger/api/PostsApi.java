@@ -69,7 +69,7 @@ public interface PostsApi {
         @ApiResponse(code = 404, message = "Not found") })
     @RequestMapping(value = "/posts/{postId}/comments/{commentId}",
         method = RequestMethod.DELETE)
-    ResponseEntity<Void> deletePostComment(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("postId") Integer postId
+    ResponseEntity<String> deletePostComment(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("postId") Integer postId
 ,@Min(1)@ApiParam(value = "Comment id",required=true, allowableValues="") @PathVariable("commentId") Integer commentId
 );
 
@@ -82,7 +82,7 @@ public interface PostsApi {
     @RequestMapping(value = "/posts/{postId}/comments/{commentId}",
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> editPostComment(@ApiParam(value = "Comment object that needs to be updated" ,required=true )  @Valid @RequestBody Comment body
+    ResponseEntity<String> editPostComment(@ApiParam(value = "Comment object that needs to be updated" ,required=true )  @Valid @RequestBody Comment body
 ,@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("postId") Integer postId
 ,@Min(1)@ApiParam(value = "Comment id",required=true, allowableValues="") @PathVariable("commentId") Integer commentId
 );
@@ -139,7 +139,7 @@ public interface PostsApi {
         @ApiResponse(code = 404, message = "Post not found") })
     @RequestMapping(value = "/posts/{id}/like",
         method = RequestMethod.GET)
-    ResponseEntity<Void> likePost(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
+    ResponseEntity<String> likePost(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
 );
 
 

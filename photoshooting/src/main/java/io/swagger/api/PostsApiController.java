@@ -72,19 +72,21 @@ public class PostsApiController implements PostsApi {
         return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Void> deletePostComment(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("postId") Integer postId
+    public ResponseEntity<String> deletePostComment(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("postId") Integer postId
 ,@Min(1)@ApiParam(value = "Comment id",required=true, allowableValues="") @PathVariable("commentId") Integer commentId
 ) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        String msg = commentsApiService.deletePostComment(postId, commentId);
+        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Void> editPostComment(@ApiParam(value = "Comment object that needs to be updated" ,required=true )  @Valid @RequestBody Comment body
+    public ResponseEntity<String> editPostComment(@ApiParam(value = "Comment object that needs to be updated" ,required=true )  @Valid @RequestBody Comment body
 ,@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("postId") Integer postId
 ,@Min(1)@ApiParam(value = "Comment id",required=true, allowableValues="") @PathVariable("commentId") Integer commentId
 ) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        String msg = commentsApiService.editPostComment(postId, commentId, body);
+        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<Post> getPost(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
@@ -114,8 +116,8 @@ public class PostsApiController implements PostsApi {
                 return new ResponseEntity<Comment>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-
-        return new ResponseEntity<Comment>(HttpStatus.NOT_IMPLEMENTED);
+        Comment comment = commentsApiService.getPostComment(postId, commentId);
+        return new ResponseEntity<Comment>(comment, HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<List<Comment>> getPostComments(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
@@ -131,10 +133,11 @@ public class PostsApiController implements PostsApi {
         return new ResponseEntity<List<Post>>(posts, HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Void> likePost(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
+    public ResponseEntity<String> likePost(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        String msg = postsApiService.likePost(id);
+        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<String> updatePost(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
