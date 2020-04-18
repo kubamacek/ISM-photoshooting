@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,6 +32,9 @@ public class MeetingsApiController implements MeetingsApi {
     private final ObjectMapper objectMapper;
 
     private final HttpServletRequest request;
+    
+    @Autowired
+    private MeetingsApiService meetingsApiService;
 
     @org.springframework.beans.factory.annotation.Autowired
     public MeetingsApiController(ObjectMapper objectMapper, HttpServletRequest request) {
@@ -38,23 +42,26 @@ public class MeetingsApiController implements MeetingsApi {
         this.request = request;
     }
 
-    public ResponseEntity<Void> createMeeting(@ApiParam(value = "Meeting object that needs to be created" ,required=true )  @Valid @RequestBody Meeting body
+    public ResponseEntity<String> createMeeting(@ApiParam(value = "Meeting object that needs to be created" ,required=true )  @Valid @RequestBody Meeting body
 ) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        String msg = meetingsApiService.addMeeting(body);
+        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Void> deleteMeeting(@Min(1)@ApiParam(value = "Meeting id",required=true, allowableValues="") @PathVariable("id") Integer id
+    public ResponseEntity<String> deleteMeeting(@Min(1)@ApiParam(value = "Meeting id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        String msg = meetingsApiService.deleteMeeting(id);
+        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Void> editMeeting(@ApiParam(value = "Meeting object that needs to be created" ,required=true )  @Valid @RequestBody Meeting body
+    public ResponseEntity<String> editMeeting(@ApiParam(value = "Meeting object that needs to be created" ,required=true )  @Valid @RequestBody Meeting body
 ,@Min(1)@ApiParam(value = "Meeting id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        String msg = meetingsApiService.updateMeeting(id, body);
+        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<Meeting> getMeeting(@Min(1)@ApiParam(value = "Meeting id",required=true, allowableValues="") @PathVariable("id") Integer id
@@ -68,13 +75,14 @@ public class MeetingsApiController implements MeetingsApi {
                 return new ResponseEntity<Meeting>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-
-        return new ResponseEntity<Meeting>(HttpStatus.NOT_IMPLEMENTED);
+        Meeting meeting = meetingsApiService.getMeetingbyId(id);
+        return new ResponseEntity<Meeting>(meeting, HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Void> getMeetings() {
+    public ResponseEntity<List<Meeting>> getMeetings() {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        List<Meeting> meetings = meetingsApiService.getMeetings();
+        return new ResponseEntity<List<Meeting>>(meetings, HttpStatus.NOT_IMPLEMENTED);
     }
 
 }

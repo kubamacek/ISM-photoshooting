@@ -34,7 +34,7 @@ public interface MeetingsApi {
     @RequestMapping(value = "/meetings",
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Void> createMeeting(@ApiParam(value = "Meeting object that needs to be created" ,required=true )  @Valid @RequestBody Meeting body
+    ResponseEntity<String> createMeeting(@ApiParam(value = "Meeting object that needs to be created" ,required=true )  @Valid @RequestBody Meeting body
 );
 
 
@@ -46,7 +46,7 @@ public interface MeetingsApi {
         @ApiResponse(code = 404, message = "Meeting not found") })
     @RequestMapping(value = "/meetings/{id}",
         method = RequestMethod.DELETE)
-    ResponseEntity<Void> deleteMeeting(@Min(1)@ApiParam(value = "Meeting id",required=true, allowableValues="") @PathVariable("id") Integer id
+    ResponseEntity<String> deleteMeeting(@Min(1)@ApiParam(value = "Meeting id",required=true, allowableValues="") @PathVariable("id") Integer id
 );
 
 
@@ -58,7 +58,7 @@ public interface MeetingsApi {
     @RequestMapping(value = "/meetings/{id}",
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> editMeeting(@ApiParam(value = "Meeting object that needs to be created" ,required=true )  @Valid @RequestBody Meeting body
+    ResponseEntity<String> editMeeting(@ApiParam(value = "Meeting object that needs to be created" ,required=true )  @Valid @RequestBody Meeting body
 ,@Min(1)@ApiParam(value = "Meeting id",required=true, allowableValues="") @PathVariable("id") Integer id
 );
 
@@ -81,6 +81,6 @@ public interface MeetingsApi {
         @ApiResponse(code = 400, message = "Bad request") })
     @RequestMapping(value = "/meetings",
         method = RequestMethod.GET)
-    ResponseEntity<Void> getMeetings();
+    ResponseEntity<List<Meeting>> getMeetings();
 
 }

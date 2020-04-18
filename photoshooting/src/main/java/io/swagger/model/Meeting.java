@@ -6,17 +6,23 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
  * Meeting
  */
+@Entity
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-03-29T16:53:00.885Z[GMT]")
-public class Meeting   {
+public class Meeting  {
   @JsonProperty("id")
-  private Long id = null;
+  private Integer id = null;
 
   @JsonProperty("title")
   private String title = null;
@@ -27,7 +33,7 @@ public class Meeting   {
   @JsonProperty("date")
   private String date = null;
 
-  public Meeting id(Long id) {
+  public Meeting id(Integer id) {
     this.id = id;
     return this;
   }
@@ -36,13 +42,13 @@ public class Meeting   {
    * Get id
    * @return id
   **/
-  @ApiModelProperty(value = "")
-  
-    public Long getId() {
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  public Integer getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -57,7 +63,7 @@ public class Meeting   {
   **/
   @ApiModelProperty(value = "")
   
-    public String getTitle() {
+  public String getTitle() {
     return title;
   }
 
@@ -76,7 +82,7 @@ public class Meeting   {
   **/
   @ApiModelProperty(value = "")
   
-    public String getDescription() {
+  public String getDescription() {
     return description;
   }
 
@@ -95,7 +101,7 @@ public class Meeting   {
   **/
   @ApiModelProperty(value = "")
   
-    public String getDate() {
+  public String getDate() {
     return date;
   }
 
@@ -103,6 +109,17 @@ public class Meeting   {
     this.date = date;
   }
 
+  public Meeting() {
+	super();
+  }
+
+  public Meeting(Integer id, String title, String description, String date) {
+	super();
+	this.id = id;
+	this.title = title;
+	this.description = description;
+	this.date = date;
+  }
 
   @Override
   public boolean equals(java.lang.Object o) {

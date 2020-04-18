@@ -6,12 +6,18 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
  * User
  */
+@Entity
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-03-29T16:53:00.885Z[GMT]")
 public class User   {
@@ -45,9 +51,9 @@ public class User   {
    * Get id
    * @return id
   **/
-  @ApiModelProperty(value = "")
-  
-    public Long getId() {
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  public Long getId() {
     return id;
   }
 
@@ -169,6 +175,20 @@ public class User   {
     this.phone = phone;
   }
 
+  public User() {
+	super();
+  }
+
+  public User(Long id, String username, String firstName, String lastName, String email, String password, String phone) {
+	super();
+	this.id = id;
+	this.username = username;
+	this.firstName = firstName;
+	this.lastName = lastName;
+	this.email = email;
+	this.password = password;
+	this.phone = phone;
+  }
 
   @Override
   public boolean equals(java.lang.Object o) {

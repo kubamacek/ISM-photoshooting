@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,6 +32,9 @@ public class OffersApiController implements OffersApi {
     private final ObjectMapper objectMapper;
 
     private final HttpServletRequest request;
+    
+    @Autowired
+    private OffersApiService offersApiService;
 
     @org.springframework.beans.factory.annotation.Autowired
     public OffersApiController(ObjectMapper objectMapper, HttpServletRequest request) {
@@ -38,23 +42,26 @@ public class OffersApiController implements OffersApi {
         this.request = request;
     }
 
-    public ResponseEntity<Void> createOffer(@ApiParam(value = "Offer object that needs to be created" ,required=true )  @Valid @RequestBody Offer body
+    public ResponseEntity<String> createOffer(@ApiParam(value = "Offer object that needs to be created" ,required=true )  @Valid @RequestBody Offer body
 ) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        String msg = offersApiService.addOffer(body);
+        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Void> deleteOffer(@Min(1)@ApiParam(value = "Offer id",required=true, allowableValues="") @PathVariable("id") Integer id
+    public ResponseEntity<String> deleteOffer(@Min(1)@ApiParam(value = "Offer id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        String msg = offersApiService.deleteOffer(id);
+        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Void> editOffer(@ApiParam(value = "Offer object that needs to be created" ,required=true )  @Valid @RequestBody Offer body
+    public ResponseEntity<String> editOffer(@ApiParam(value = "Offer object that needs to be created" ,required=true )  @Valid @RequestBody Offer body
 ,@Min(1)@ApiParam(value = "Offer id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        String msg = offersApiService.updateOffer(id, body);
+        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<Offer> getOffer(@Min(1)@ApiParam(value = "Offer id",required=true, allowableValues="") @PathVariable("id") Integer id
@@ -68,13 +75,14 @@ public class OffersApiController implements OffersApi {
                 return new ResponseEntity<Offer>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-
-        return new ResponseEntity<Offer>(HttpStatus.NOT_IMPLEMENTED);
+        Offer offer = offersApiService.getOfferbyId(id);
+        return new ResponseEntity<Offer>(offer, HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Void> getOffers() {
+    public ResponseEntity<List<Offer>> getOffers() {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        List<Offer> offers = offersApiService.getOffers();
+        return new ResponseEntity<List<Offer>>(offers, HttpStatus.NOT_IMPLEMENTED);
     }
 
 }

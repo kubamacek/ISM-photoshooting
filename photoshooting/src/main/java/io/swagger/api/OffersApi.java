@@ -34,7 +34,7 @@ public interface OffersApi {
     @RequestMapping(value = "/offers",
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Void> createOffer(@ApiParam(value = "Offer object that needs to be created" ,required=true )  @Valid @RequestBody Offer body
+    ResponseEntity<String> createOffer(@ApiParam(value = "Offer object that needs to be created" ,required=true )  @Valid @RequestBody Offer body
 );
 
 
@@ -46,7 +46,7 @@ public interface OffersApi {
         @ApiResponse(code = 404, message = "Offer not found") })
     @RequestMapping(value = "/offers/{id}",
         method = RequestMethod.DELETE)
-    ResponseEntity<Void> deleteOffer(@Min(1)@ApiParam(value = "Offer id",required=true, allowableValues="") @PathVariable("id") Integer id
+    ResponseEntity<String> deleteOffer(@Min(1)@ApiParam(value = "Offer id",required=true, allowableValues="") @PathVariable("id") Integer id
 );
 
 
@@ -58,7 +58,7 @@ public interface OffersApi {
     @RequestMapping(value = "/offers/{id}",
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> editOffer(@ApiParam(value = "Offer object that needs to be created" ,required=true )  @Valid @RequestBody Offer body
+    ResponseEntity<String> editOffer(@ApiParam(value = "Offer object that needs to be created" ,required=true )  @Valid @RequestBody Offer body
 ,@Min(1)@ApiParam(value = "Offer id",required=true, allowableValues="") @PathVariable("id") Integer id
 );
 
@@ -81,6 +81,6 @@ public interface OffersApi {
         @ApiResponse(code = 400, message = "Bad request") })
     @RequestMapping(value = "/offers",
         method = RequestMethod.GET)
-    ResponseEntity<Void> getOffers();
+    ResponseEntity<List<Offer>> getOffers();
 
 }

@@ -7,17 +7,27 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
  * Offer
  */
+@Entity
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-03-29T16:53:00.885Z[GMT]")
 public class Offer   {
   @JsonProperty("id")
-  private Long id = null;
+  private Integer id = null;
 
   @JsonProperty("title")
   private String title = null;
@@ -25,40 +35,11 @@ public class Offer   {
   /**
    * Gets or Sets option
    */
-  public enum OptionEnum {
-    SELL("sell"),
-    
-    BUY("buy");
-
-    private String value;
-
-    OptionEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static OptionEnum fromValue(String text) {
-      for (OptionEnum b : OptionEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-  @JsonProperty("option")
-  private OptionEnum option = null;
 
   @JsonProperty("description")
   private String description = null;
 
-  public Offer id(Long id) {
+  public Offer id(Integer id) {
     this.id = id;
     return this;
   }
@@ -67,13 +48,13 @@ public class Offer   {
    * Get id
    * @return id
   **/
-  @ApiModelProperty(value = "")
-  
-    public Long getId() {
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  public Integer getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -96,25 +77,6 @@ public class Offer   {
     this.title = title;
   }
 
-  public Offer option(OptionEnum option) {
-    this.option = option;
-    return this;
-  }
-
-  /**
-   * Get option
-   * @return option
-  **/
-  @ApiModelProperty(value = "")
-  
-    public OptionEnum getOption() {
-    return option;
-  }
-
-  public void setOption(OptionEnum option) {
-    this.option = option;
-  }
-
   public Offer description(String description) {
     this.description = description;
     return this;
@@ -133,7 +95,17 @@ public class Offer   {
   public void setDescription(String description) {
     this.description = description;
   }
+  
+  public Offer() {
+	super();
+  }
 
+  public Offer(Integer id, String title, String description) {
+	super();
+	this.id = id;
+	this.title = title;
+	this.description = description;
+  }
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -146,13 +118,12 @@ public class Offer   {
     Offer offer = (Offer) o;
     return Objects.equals(this.id, offer.id) &&
         Objects.equals(this.title, offer.title) &&
-        Objects.equals(this.option, offer.option) &&
         Objects.equals(this.description, offer.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, title, option, description);
+    return Objects.hash(id, title, description);
   }
 
   @Override
@@ -162,7 +133,6 @@ public class Offer   {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
-    sb.append("    option: ").append(toIndentedString(option)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("}");
     return sb.toString();
