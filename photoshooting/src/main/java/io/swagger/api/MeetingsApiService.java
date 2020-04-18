@@ -44,4 +44,12 @@ public class MeetingsApiService {
 		meetingsApiRepository.delete(id);
 		return "OK";
 	}
+	
+	public Boolean checkIfExists(Integer id) {
+		Meeting meeting = meetingsApiRepository.findOne(id);
+		if (meeting != null) {
+			return true;
+		}
+		else return false;
+	}
 }

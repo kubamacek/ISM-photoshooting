@@ -51,7 +51,9 @@ public class PostsApiController implements PostsApi {
 
     public ResponseEntity<String> addPost(@ApiParam(value = "Post object that needs to be created" ,required=true )  @Valid @RequestBody Post body
 ) {
-    	String accept = request.getHeader("Accept");
+    	if (body.validateAllFields() == false){
+    		return new ResponseEntity<String>("Invalid request",HttpStatus.BAD_REQUEST);
+    	}
         String msg = postsApiService.addPost(body);
         return new ResponseEntity<String>(msg, HttpStatus.OK);
     }
@@ -59,93 +61,124 @@ public class PostsApiController implements PostsApi {
     public ResponseEntity<String> addPostComment(@ApiParam(value = "Comment object that needs to be created" ,required=true )  @Valid @RequestBody Comment body
 ,@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
-        String accept = request.getHeader("Accept");
-        body.setPost(new Post(id, 0,"", "", "", "", ""));
-        String msg = commentsApiService.addPostComment(body);
-        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
+        if (body.validateAllFields() == false) {
+        	return new ResponseEntity<String>("Invalid request",HttpStatus.BAD_REQUEST);
+        }
+        else {
+        	if (postsApiService.checkIfExists(id) == true) {
+        		Post post = postsApiService.getPostbyId(id);
+                body.setPost(post);
+                String msg = commentsApiService.addPostComment(body);
+                return new ResponseEntity<String>(msg, HttpStatus.OK);
+        	}
+        	else {
+        		return new ResponseEntity<String>("Post not found", HttpStatus.NOT_FOUND);
+        	}
+        }
     }
 
     public ResponseEntity<String> deletePost(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
-        String accept = request.getHeader("Accept");
-        String msg = postsApiService.deletePost(id);
-        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
+        if (postsApiService.checkIfExists(id) == true) {
+        	String msg = postsApiService.deletePost(id);
+            return new ResponseEntity<String>(msg, HttpStatus.OK);
+        }
+        else {
+        	return new ResponseEntity<String>("Post not found", HttpStatus.NOT_FOUND);
+        }
     }
 
     public ResponseEntity<String> deletePostComment(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("postId") Integer postId
 ,@Min(1)@ApiParam(value = "Comment id",required=true, allowableValues="") @PathVariable("commentId") Integer commentId
 ) {
-        String accept = request.getHeader("Accept");
-        String msg = commentsApiService.deletePostComment(postId, commentId);
-        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
+        if (commentsApiService.checkIfExists(commentId) == true) {
+        	String msg = commentsApiService.deletePostComment(postId, commentId);
+            return new ResponseEntity<String>(msg, HttpStatus.OK);
+        }
+        else {
+        	return new ResponseEntity<String>("Comment not found", HttpStatus.NOT_FOUND);
+        }
     }
 
     public ResponseEntity<String> editPostComment(@ApiParam(value = "Comment object that needs to be updated" ,required=true )  @Valid @RequestBody Comment body
 ,@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("postId") Integer postId
 ,@Min(1)@ApiParam(value = "Comment id",required=true, allowableValues="") @PathVariable("commentId") Integer commentId
 ) {
-        String accept = request.getHeader("Accept");
-        String msg = commentsApiService.editPostComment(postId, commentId, body);
-        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
+    	if (body.validateAllFields() == true) {
+    		if (commentsApiService.checkIfExists(commentId) == true) {
+        		String msg = commentsApiService.editPostComment(postId, commentId, body);
+                return new ResponseEntity<String>(msg, HttpStatus.OK);
+        	}
+        	else {
+        		return new ResponseEntity<String>("Comment not found", HttpStatus.NOT_FOUND);
+        	}
+    	}
+    	else {
+    		return new ResponseEntity<String>("Invalid request", HttpStatus.BAD_REQUEST);
+    	}
     }
 
     public ResponseEntity<Post> getPost(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<Post>(objectMapper.readValue("{\n  \"date\" : \"date\",\n  \"author\" : \"author\",\n  \"description\" : \"description\",\n  \"photo\" : \"photo\",\n  \"id\" : 0,\n  \"title\" : \"title\",\n  \"likes\" : 6\n}", Post.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Post>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+        if (postsApiService.checkIfExists(id) == true) {
+        	Post post = postsApiService.getPostbyId(id);
+            return new ResponseEntity<Post>(post, HttpStatus.OK);
         }
-        Post post = postsApiService.getPostbyId(id);
-        return new ResponseEntity<Post>(post, HttpStatus.NOT_IMPLEMENTED);
+        else {
+        	return new ResponseEntity<Post>(HttpStatus.NOT_FOUND);        	
+        }
     }
 
     public ResponseEntity<Comment> getPostComment(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("postId") Integer postId
 ,@Min(1)@ApiParam(value = "Comment id",required=true, allowableValues="") @PathVariable("commentId") Integer commentId
 ) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<Comment>(objectMapper.readValue("{\n  \"author\" : \"author\",\n  \"id\" : 0,\n  \"body\" : \"body\"\n}", Comment.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Comment>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-        Comment comment = commentsApiService.getPostComment(postId, commentId);
-        return new ResponseEntity<Comment>(comment, HttpStatus.NOT_IMPLEMENTED);
+    	if (commentsApiService.checkIfExists(commentId) == true) {
+    		Comment comment = commentsApiService.getPostComment(postId, commentId);
+            return new ResponseEntity<Comment>(comment, HttpStatus.OK);
+    	}
+    	else {
+    		Comment comment = commentsApiService.getPostComment(postId, commentId);
+            return new ResponseEntity<Comment>(HttpStatus.NOT_FOUND);    		
+    	}
     }
 
     public ResponseEntity<List<Comment>> getPostComments(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
-        String accept = request.getHeader("Accept");
-        List<Comment> comments = commentsApiService.getPostComments(id);
-        return new ResponseEntity<List<Comment>>(comments, HttpStatus.NOT_IMPLEMENTED);
+        if (postsApiService.checkIfExists(id) == true) {
+        	List<Comment> comments = commentsApiService.getPostComments(id);
+            return new ResponseEntity<List<Comment>>(comments, HttpStatus.OK);
+        }
+        else {
+        	return new ResponseEntity<List<Comment>>(HttpStatus.NOT_FOUND);
+        }
     }
 
     public ResponseEntity<List<Post>> getPosts() {
-        String accept = request.getHeader("Accept");
         List<Post> posts = postsApiService.getPosts();
-        return new ResponseEntity<List<Post>>(posts, HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<List<Post>>(posts, HttpStatus.OK);
     }
 
     public ResponseEntity<String> likePost(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
-        String accept = request.getHeader("Accept");
         String msg = postsApiService.likePost(id);
-        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<String>(msg, HttpStatus.OK);
     }
 
     public ResponseEntity<String> updatePost(@Min(1)@ApiParam(value = "Post id",required=true, allowableValues="") @PathVariable("id") Integer id
 ,@ApiParam(value = "Post object that needs to be updated"  )  @Valid @RequestBody Post body
 ) {
-        String accept = request.getHeader("Accept");
-        String msg = postsApiService.updatePost(id, body);
-        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
+        if (body.validateAllFields() == true) {
+        	if (postsApiService.checkIfExists(id)) {
+        		String msg = postsApiService.updatePost(id, body);
+                return new ResponseEntity<String>(msg, HttpStatus.OK);
+        	}
+        	else {
+        		return new ResponseEntity<String>("Post not found", HttpStatus.NOT_FOUND);
+        	}
+        }
+        else {
+        	return new ResponseEntity<String>("Invalid request", HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

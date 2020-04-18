@@ -164,4 +164,11 @@ public class Meeting  {
     }
     return o.toString().replace("\n", "\n    ");
   }
+  
+  public Boolean validateAllFields() {
+	  if(this.getDate() != null && this.getTitle() != null && this.getDescription() != null) {
+		  return true;
+	  }
+	  else return false;
+  }
 }

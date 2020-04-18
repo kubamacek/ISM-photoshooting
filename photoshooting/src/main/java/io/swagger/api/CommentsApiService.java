@@ -47,4 +47,12 @@ public class CommentsApiService {
 		return "OK";
 	}
 	
+	public Boolean checkIfExists(Integer id) {
+		Comment comment = commentsApiRepository.findOne(id);
+		if (comment != null) {
+			return true;
+		}
+		else return false;
+	}
+	
 }

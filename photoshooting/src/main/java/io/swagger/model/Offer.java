@@ -148,4 +148,11 @@ public class Offer   {
     }
     return o.toString().replace("\n", "\n    ");
   }
+  
+  public Boolean validateAllFields() {
+	  if(this.getTitle() != null && this.getDescription() != null) {
+		  return true;
+	  }
+	  else return false;
+  }
 }

@@ -44,45 +44,58 @@ public class OffersApiController implements OffersApi {
 
     public ResponseEntity<String> createOffer(@ApiParam(value = "Offer object that needs to be created" ,required=true )  @Valid @RequestBody Offer body
 ) {
-        String accept = request.getHeader("Accept");
-        String msg = offersApiService.addOffer(body);
-        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
+        if (body.validateAllFields() == true) {
+        	String msg = offersApiService.addOffer(body);
+            return new ResponseEntity<String>(msg, HttpStatus.OK);
+        }
+        else {
+        	return new ResponseEntity<String>("Invalid request", HttpStatus.BAD_REQUEST);
+        }
+        
     }
 
     public ResponseEntity<String> deleteOffer(@Min(1)@ApiParam(value = "Offer id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
-        String accept = request.getHeader("Accept");
-        String msg = offersApiService.deleteOffer(id);
-        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
+        if (offersApiService.checkIfExists(id) == true) {
+        	String msg = offersApiService.deleteOffer(id);
+            return new ResponseEntity<String>(msg, HttpStatus.OK);
+        }
+        else {
+        	return new ResponseEntity<String>("Offer not found", HttpStatus.NOT_FOUND);
+        }
     }
 
     public ResponseEntity<String> editOffer(@ApiParam(value = "Offer object that needs to be created" ,required=true )  @Valid @RequestBody Offer body
 ,@Min(1)@ApiParam(value = "Offer id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
-        String accept = request.getHeader("Accept");
-        String msg = offersApiService.updateOffer(id, body);
-        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
+        if (body.validateAllFields() == true) {
+        	if (offersApiService.checkIfExists(id) == true) {
+        		String msg = offersApiService.updateOffer(id, body);
+                return new ResponseEntity<String>(msg, HttpStatus.OK);
+        	}
+        	else {
+        		return new ResponseEntity<String>("Offer not found", HttpStatus.NOT_FOUND);
+        	}
+        }
+        else {
+        	return new ResponseEntity<String>("Invalid request", HttpStatus.BAD_REQUEST);
+        }
     }
 
     public ResponseEntity<Offer> getOffer(@Min(1)@ApiParam(value = "Offer id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<Offer>(objectMapper.readValue("{\n  \"description\" : \"description\",\n  \"id\" : 0,\n  \"title\" : \"title\",\n  \"option\" : \"sell\"\n}", Offer.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Offer>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+        if (offersApiService.checkIfExists(id) == true) {
+        	Offer offer = offersApiService.getOfferbyId(id);
+            return new ResponseEntity<Offer>(offer, HttpStatus.OK);
         }
-        Offer offer = offersApiService.getOfferbyId(id);
-        return new ResponseEntity<Offer>(offer, HttpStatus.NOT_IMPLEMENTED);
+        else {
+            return new ResponseEntity<Offer>(HttpStatus.NOT_FOUND);
+        }
     }
 
     public ResponseEntity<List<Offer>> getOffers() {
-        String accept = request.getHeader("Accept");
         List<Offer> offers = offersApiService.getOffers();
-        return new ResponseEntity<List<Offer>>(offers, HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<List<Offer>>(offers, HttpStatus.OK);
     }
 
 }

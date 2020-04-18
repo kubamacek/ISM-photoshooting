@@ -157,4 +157,11 @@ public class Comment   {
     }
     return o.toString().replace("\n", "\n    ");
   }
+  
+  public Boolean validateAllFields() {
+	  if (this.getAuthor() != null && this.getBody() != null) {
+		  return true;
+	  }
+	  else return false;
+  }
 }

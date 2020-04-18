@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.swagger.model.Meeting;
 import io.swagger.model.Offer;
 import io.swagger.model.Post;
 
@@ -43,6 +44,14 @@ public class OffersApiService {
 	public String deleteOffer(Integer id) {
 		offersApiRepository.delete(id);
 		return "OK";
+	}
+	
+	public Boolean checkIfExists(Integer id) {
+		Offer offer = offersApiRepository.findOne(id);
+		if (offer != null) {
+			return true;
+		}
+		else return false;
 	}
 
 }

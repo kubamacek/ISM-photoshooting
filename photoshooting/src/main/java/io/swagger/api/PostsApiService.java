@@ -55,4 +55,12 @@ public class PostsApiService {
 		postsApiRepository.save(post);
 		return "OK";
 	}
+	
+	public Boolean checkIfExists(Integer id) {
+		Post post = postsApiRepository.findOne(id);
+		if (post != null) {
+			return true;
+		}
+		else return false;
+	}
 }

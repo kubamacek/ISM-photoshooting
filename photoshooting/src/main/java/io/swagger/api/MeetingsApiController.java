@@ -44,45 +44,56 @@ public class MeetingsApiController implements MeetingsApi {
 
     public ResponseEntity<String> createMeeting(@ApiParam(value = "Meeting object that needs to be created" ,required=true )  @Valid @RequestBody Meeting body
 ) {
-        String accept = request.getHeader("Accept");
-        String msg = meetingsApiService.addMeeting(body);
-        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
+        if (body.validateAllFields() == true) {
+        	String msg = meetingsApiService.addMeeting(body);
+            return new ResponseEntity<String>(msg, HttpStatus.OK);
+        }
+        else {
+        	return new ResponseEntity<String>("Invalid request", HttpStatus.BAD_REQUEST);
+        }
     }
 
     public ResponseEntity<String> deleteMeeting(@Min(1)@ApiParam(value = "Meeting id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
-        String accept = request.getHeader("Accept");
-        String msg = meetingsApiService.deleteMeeting(id);
-        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
+    	if (meetingsApiService.checkIfExists(id) == true) {
+            String msg = meetingsApiService.deleteMeeting(id);
+            return new ResponseEntity<String>(msg, HttpStatus.OK);
+    	}
+    	else {
+            return new ResponseEntity<String>("Meeting not found", HttpStatus.NOT_FOUND);
+    	}
     }
 
     public ResponseEntity<String> editMeeting(@ApiParam(value = "Meeting object that needs to be created" ,required=true )  @Valid @RequestBody Meeting body
 ,@Min(1)@ApiParam(value = "Meeting id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
-        String accept = request.getHeader("Accept");
-        String msg = meetingsApiService.updateMeeting(id, body);
-        return new ResponseEntity<String>(msg, HttpStatus.NOT_IMPLEMENTED);
+    	if (body.validateAllFields() == true) {
+    		if (meetingsApiService.checkIfExists(id) == true) {
+    	        String msg = meetingsApiService.updateMeeting(id, body);
+    	        return new ResponseEntity<String>(msg, HttpStatus.OK);
+    		}
+    		else {
+    	        return new ResponseEntity<String>("Meeting not found", HttpStatus.NOT_FOUND);    		}
+    	}
+    	else {
+            return new ResponseEntity<String>("Invalid request", HttpStatus.BAD_REQUEST);
+    	}
     }
 
     public ResponseEntity<Meeting> getMeeting(@Min(1)@ApiParam(value = "Meeting id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<Meeting>(objectMapper.readValue("{\n  \"date\" : \"date\",\n  \"description\" : \"description\",\n  \"id\" : 0,\n  \"title\" : \"title\"\n}", Meeting.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Meeting>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+        if (meetingsApiService.checkIfExists(id) == true) {
+            Meeting meeting = meetingsApiService.getMeetingbyId(id);
+            return new ResponseEntity<Meeting>(meeting, HttpStatus.OK);
         }
-        Meeting meeting = meetingsApiService.getMeetingbyId(id);
-        return new ResponseEntity<Meeting>(meeting, HttpStatus.NOT_IMPLEMENTED);
+        else {
+            return new ResponseEntity<Meeting>(HttpStatus.NOT_FOUND);
+        }
     }
 
     public ResponseEntity<List<Meeting>> getMeetings() {
-        String accept = request.getHeader("Accept");
         List<Meeting> meetings = meetingsApiService.getMeetings();
-        return new ResponseEntity<List<Meeting>>(meetings, HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<List<Meeting>>(meetings, HttpStatus.OK);
     }
 
 }
