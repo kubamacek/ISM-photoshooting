@@ -159,7 +159,7 @@ public class Comment   {
   }
   
   public Boolean validateAllFields() {
-	  if (this.getAuthor() != null && this.getBody() != null) {
+	  if (this.getBody() != null) {
 		  return true;
 	  }
 	  else return false;

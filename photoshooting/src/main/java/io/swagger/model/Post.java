@@ -257,7 +257,7 @@ public class Post   {
   }
   
   public Boolean validateAllFields() {
-	  if (this.getAuthor() != null && this.getTitle() != null && this.getPhoto() != null && this.getDate() != null && this.getDescription() != null) {
+	  if (this.getTitle() != null && this.getPhoto() != null && this.getDescription() != null) {
 		  return true;
 	  }
 	  else return false;

@@ -15,6 +15,9 @@ public class CommentsApiService {
 	@Autowired
 	private CommentsApiRepository commentsApiRepository;
 	
+	@Autowired
+	private UsersApiService usersApiService;
+	
 	public List<Comment> getPostComments(Integer postId){
 		List<Comment> comments = new ArrayList<>();
 		commentsApiRepository.findByPostId(postId).forEach(comments::add);
@@ -22,8 +25,13 @@ public class CommentsApiService {
 	}
 	
 	public String addPostComment(Comment comment) {
-		commentsApiRepository.save(comment);
-		Integer id = comment.getId();
+		Comment commentToSave = new Comment();
+		commentToSave.setBody(comment.getBody());
+		org.springframework.security.core.userdetails.User user = usersApiService.getCurrentUser().orElseThrow(()->new IllegalArgumentException("No user logged in!"));
+		commentToSave.setAuthor(user.getUsername());
+		commentToSave.setPost(comment.getPost());
+		commentsApiRepository.save(commentToSave);
+		Integer id = commentToSave.getId();
 		String ids = id.toString();
 		return ids;
 	}

@@ -6,6 +6,8 @@
 package io.swagger.api;
 
 import io.swagger.annotations.*;
+import io.swagger.model.LoginRequest;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,8 +34,6 @@ public interface LoginApi {
         @ApiResponse(code = 400, message = "Invalid username/password supplied") })
     @RequestMapping(value = "/login",
         method = RequestMethod.GET)
-    ResponseEntity<Void> loginUser(@NotNull @ApiParam(value = "The user name for login", required = true) @Valid @RequestParam(value = "username", required = true) String username
-,@NotNull @ApiParam(value = "The password for login in clear text", required = true) @Valid @RequestParam(value = "password", required = true) String password
-);
+    ResponseEntity<String> loginUser(@NotNull @ApiParam(value = "The user name for login", required = true) @Valid @RequestBody LoginRequest loginRequest);
 
 }

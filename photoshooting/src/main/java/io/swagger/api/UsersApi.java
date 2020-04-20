@@ -34,7 +34,7 @@ public interface UsersApi {
     @RequestMapping(value = "/users",
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Void> createUser(@ApiParam(value = "User object that needs to be created" ,required=true )  @Valid @RequestBody User body
+    ResponseEntity<String> createUser(@ApiParam(value = "User object that needs to be created" ,required=true )  @Valid @RequestBody User body
 );
 
 
@@ -46,7 +46,7 @@ public interface UsersApi {
         @ApiResponse(code = 404, message = "User not found") })
     @RequestMapping(value = "/users/{id}",
         method = RequestMethod.DELETE)
-    ResponseEntity<Void> deleteUser(@Min(1)@ApiParam(value = "User id",required=true, allowableValues="") @PathVariable("id") Integer id
+    ResponseEntity<String> deleteUser(@Min(1)@ApiParam(value = "User id",required=true, allowableValues="") @PathVariable("id") Integer id
 );
 
 
@@ -58,7 +58,7 @@ public interface UsersApi {
     @RequestMapping(value = "/users/{id}",
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> editUser(@ApiParam(value = "User object that needs to be updated" ,required=true )  @Valid @RequestBody User body
+    ResponseEntity<String> editUser(@ApiParam(value = "User object that needs to be updated" ,required=true )  @Valid @RequestBody User body
 ,@Min(1)@ApiParam(value = "User id",required=true, allowableValues="") @PathVariable("id") Integer id
 );
 
@@ -81,6 +81,5 @@ public interface UsersApi {
         @ApiResponse(code = 400, message = "Bad request") })
     @RequestMapping(value = "/users",
         method = RequestMethod.GET)
-    ResponseEntity<Void> getUsers();
-
+    ResponseEntity<List<User>> getUsers();
 }

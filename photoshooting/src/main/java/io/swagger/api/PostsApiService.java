@@ -1,5 +1,6 @@
 package io.swagger.api;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,12 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.swagger.model.Post;
+import io.swagger.model.User;
 
 @Service
 public class PostsApiService {
 	
 	@Autowired
     private PostsApiRepository postsApiRepository;
+	
+	@Autowired
+	private UsersApiService usersApiService;
 
 	public List<Post> getPosts(){
 		List<Post> posts = new ArrayList<>();
@@ -22,8 +27,15 @@ public class PostsApiService {
 	}
 	
 	public String addPost(Post post) {
-		postsApiRepository.save(post);
-		Integer id = post.getId();
+		Post postToSave = new Post();
+		postToSave.setTitle(post.getTitle());
+		postToSave.setDescription(post.getDescription());
+		postToSave.setPhoto(post.getPhoto());
+		org.springframework.security.core.userdetails.User user = usersApiService.getCurrentUser().orElseThrow(()->new IllegalArgumentException("No user logged in!"));
+		postToSave.setAuthor(user.getUsername());
+		postToSave.setDate(Instant.now().toString());
+		postsApiRepository.save(postToSave);
+		Integer id = postToSave.getId();
 		String ids = id.toString();
 		return ids;
 	}

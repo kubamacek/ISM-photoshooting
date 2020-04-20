@@ -42,43 +42,59 @@ public class UsersApiController implements UsersApi {
         this.request = request;
     }
 
-    public ResponseEntity<Void> createUser(@ApiParam(value = "User object that needs to be created" ,required=true )  @Valid @RequestBody User body
+    public ResponseEntity<String> createUser(@ApiParam(value = "User object that needs to be created" ,required=true )  @Valid @RequestBody User body
 ) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        if (body.validateAllFields() == true) {
+        	String msg = usersApiService.addUser(body);
+            return new ResponseEntity<String>(msg, HttpStatus.OK);
+        }
+        else {
+        	return new ResponseEntity<String>("Invalid request", HttpStatus.BAD_REQUEST);        	
+        }
     }
 
-    public ResponseEntity<Void> deleteUser(@Min(1)@ApiParam(value = "User id",required=true, allowableValues="") @PathVariable("id") Integer id
+    public ResponseEntity<String> deleteUser(@Min(1)@ApiParam(value = "User id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        if (usersApiService.checkIfExists(id) == true) {
+        	String msg = usersApiService.deleteUser(id);
+            return new ResponseEntity<String>(msg, HttpStatus.OK);
+        }
+        else {
+        	return new ResponseEntity<String>("User not found", HttpStatus.NOT_FOUND);
+        }
     }
 
-    public ResponseEntity<Void> editUser(@ApiParam(value = "User object that needs to be updated" ,required=true )  @Valid @RequestBody User body
+    public ResponseEntity<String> editUser(@ApiParam(value = "User object that needs to be updated" ,required=true )  @Valid @RequestBody User body
 ,@Min(1)@ApiParam(value = "User id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+    	if (body.validateAllFields() == true) {
+    		if (usersApiService.checkIfExists(id)) {
+    			String msg = usersApiService.updateUser(id,  body);
+    	        return new ResponseEntity<String>(msg, HttpStatus.OK);
+    		}
+    		else {
+    			return new ResponseEntity<String>("User not found", HttpStatus.NOT_FOUND);
+    		}
+    	}
+    	else {
+    		return new ResponseEntity<String>("Invalid request", HttpStatus.BAD_REQUEST);
+    	}
     }
 
     public ResponseEntity<User> getUser(@Min(1)@ApiParam(value = "User id",required=true, allowableValues="") @PathVariable("id") Integer id
 ) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<User>(objectMapper.readValue("{\n  \"firstName\" : \"firstName\",\n  \"lastName\" : \"lastName\",\n  \"password\" : \"password\",\n  \"phone\" : \"phone\",\n  \"id\" : 0,\n  \"email\" : \"email\",\n  \"username\" : \"username\"\n}", User.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<User>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+        if (usersApiService.checkIfExists(id) == true) {
+        	User user = usersApiService.getUserbyId(id);
+        	return new ResponseEntity<User>(user, HttpStatus.OK);
         }
-
-        return new ResponseEntity<User>(HttpStatus.NOT_IMPLEMENTED);
+        else {
+        	return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    public ResponseEntity<Void> getUsers() {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<List<User>> getUsers() {
+        List<User> users = usersApiService.getUsers();
+        return new ResponseEntity<List<User>>(users, HttpStatus.OK);
     }
 
 }

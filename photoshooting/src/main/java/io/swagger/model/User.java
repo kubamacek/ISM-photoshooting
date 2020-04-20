@@ -22,7 +22,7 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-03-29T16:53:00.885Z[GMT]")
 public class User   {
   @JsonProperty("id")
-  private Long id = null;
+  private Integer id = null;
 
   @JsonProperty("username")
   private String username = null;
@@ -42,7 +42,7 @@ public class User   {
   @JsonProperty("phone")
   private String phone = null;
 
-  public User id(Long id) {
+  public User id(Integer id) {
     this.id = id;
     return this;
   }
@@ -53,11 +53,11 @@ public class User   {
   **/
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  public Long getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -179,7 +179,7 @@ public class User   {
 	super();
   }
 
-  public User(Long id, String username, String firstName, String lastName, String email, String password, String phone) {
+  public User(Integer id, String username, String firstName, String lastName, String email, String password, String phone) {
 	super();
 	this.id = id;
 	this.username = username;
@@ -238,5 +238,12 @@ public class User   {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
+  }
+  
+  public Boolean validateAllFields() {
+	  if(this.getUsername() != null && this.getEmail() != null && this.getFirstName() != null && this.getLastName() != null && this.getPhone() != null && this.getPassword() != null) {
+		  return true;
+	  }
+	  else return false;
   }
 }
