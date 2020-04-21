@@ -9,20 +9,28 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
+import {Ng2Webstorage} from 'ngx-webstorage'
+import { RegisterSuccessComponent } from './users/register-success/register-success.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterSuccessComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    RouterModule.forRoot([{path: 'register', component: RegisterComponent}]),
+    Ng2Webstorage.forRoot(),
+    RouterModule.forRoot([
+      {path: 'register', component: RegisterComponent},
+      {path: 'login', component: LoginComponent},
+      {path: 'register-success', component: RegisterSuccessComponent}
+    ]),
     HttpClientModule
   ],
   providers: [],

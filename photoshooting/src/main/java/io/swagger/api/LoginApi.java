@@ -34,7 +34,7 @@ public interface LoginApi {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 400, message = "Invalid username/password supplied") })
     @RequestMapping(value = "/login",
-        method = RequestMethod.GET)
+        method = RequestMethod.POST)
     ResponseEntity<AuthenticationResponse> loginUser(@NotNull @ApiParam(value = "The user name for login", required = true) @Valid @RequestBody LoginRequest loginRequest);
 
 }
