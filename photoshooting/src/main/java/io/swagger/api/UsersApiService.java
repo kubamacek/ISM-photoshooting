@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import io.swagger.model.AuthenticationResponse;
 import io.swagger.model.LoginRequest;
 import io.swagger.model.Post;
 import io.swagger.model.User;
@@ -78,10 +79,11 @@ public class UsersApiService {
 		else return false;
 	}
 	
-	public String login(LoginRequest loginRequest) {
+	public AuthenticationResponse login(LoginRequest loginRequest) {
 		Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authenticate);
-		return jwtProvider.generateToken(authenticate);
+		String authenticationToken = jwtProvider.generateToken(authenticate);
+		return new AuthenticationResponse(authenticationToken, loginRequest.getUsername());
 	}
 	
 	public Optional<org.springframework.security.core.userdetails.User> getCurrentUser() {

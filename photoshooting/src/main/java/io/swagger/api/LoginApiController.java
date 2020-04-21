@@ -2,6 +2,7 @@ package io.swagger.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
+import io.swagger.model.AuthenticationResponse;
 import io.swagger.model.LoginRequest;
 
 import org.slf4j.Logger;
@@ -43,10 +44,10 @@ public class LoginApiController implements LoginApi {
         this.request = request;
     }
 
-    public ResponseEntity<String> loginUser(@NotNull @ApiParam(value = "The user name for login", required = true) @Valid @RequestBody LoginRequest body
+    public ResponseEntity<AuthenticationResponse> loginUser(@NotNull @ApiParam(value = "The user name for login", required = true) @Valid @RequestBody LoginRequest body
 ) {
-    	String msg = usersApiService.login(body);
-        return new ResponseEntity<String>(msg, HttpStatus.OK);
+    	AuthenticationResponse msg = usersApiService.login(body);
+        return new ResponseEntity<AuthenticationResponse>(msg, HttpStatus.OK);
     }
 
 }

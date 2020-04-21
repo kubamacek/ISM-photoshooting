@@ -6,6 +6,7 @@
 package io.swagger.api;
 
 import io.swagger.annotations.*;
+import io.swagger.model.AuthenticationResponse;
 import io.swagger.model.LoginRequest;
 
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,6 @@ public interface LoginApi {
         @ApiResponse(code = 400, message = "Invalid username/password supplied") })
     @RequestMapping(value = "/login",
         method = RequestMethod.GET)
-    ResponseEntity<String> loginUser(@NotNull @ApiParam(value = "The user name for login", required = true) @Valid @RequestBody LoginRequest loginRequest);
+    ResponseEntity<AuthenticationResponse> loginUser(@NotNull @ApiParam(value = "The user name for login", required = true) @Valid @RequestBody LoginRequest loginRequest);
 
 }
