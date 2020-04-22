@@ -20,6 +20,7 @@ export class UsersService {
   register(registration: Registration): Observable<any> {
     return this.httpClient.post(this.backend_url + 'users', registration);
   }
+
   login(login: Login): Observable<boolean> {
     console.log(login);
     return this.httpClient.post<JwtAutResponse>(this.backend_url + 'login', login).pipe(map(data => {
@@ -27,5 +28,9 @@ export class UsersService {
       this.localStoraqeService.store('username', data.username);
       return true;
     }));
+  }
+
+  isAuthenticated(): Boolean{
+    return this.localStoraqeService.retrieve('username');
   }
 }
