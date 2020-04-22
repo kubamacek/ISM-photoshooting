@@ -1,0 +1,102 @@
+<div class="container">
+
+    <div class="row">
+
+      <!-- Post Content Column -->
+      <div class="col-lg-8">
+
+        <!-- Title -->
+        <h1 class="mt-4">{{post.title}}</h1>
+
+        <!-- Author -->
+        <p class="lead">
+          by
+          <a href="#">{{post.author}}</a>
+        </p>
+
+        <!-- Preview Image -->
+        <img class="img-fluid rounded" src="https://i.picsum.photos/id/959/900/300.jpg" alt="">
+
+        <hr>
+
+        <!-- Post Content -->
+        <p class="lead">{{post.description}}</p>
+
+        <hr>
+
+        <!-- Comments Form -->
+        <div class="card my-4">
+          <h5 class="card-header">Leave a Comment:</h5>
+          <div class="card-body">
+            <form>
+              <div class="form-group">
+                <textarea class="form-control" rows="3"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Single Comment -->
+        <div class="media mb-4">
+          <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+          <div class="media-body">
+            <h5 class="mt-0">Tom</h5>
+            Comment content.
+            </div>
+        </div>
+
+      </div>
+
+      <!-- Sidebar widgets -->
+      <div class="col-md-4">
+
+        <!-- Meetings -->
+        <div class="card my-4">
+          <h5 class="card-header">Upcoming meetings</h5>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <ul class="list-unstyled mb-0">
+                  <li>
+                    <a href="#">1st</a>
+                  </li>
+                  <li>
+                    <a href="#">2nd</a>
+                  </li>
+                  <li>
+                    <a href="#">3rd</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Offers -->
+        <div class="card my-4">
+          <h5 class="card-header">Newest offers</h5>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <ul class="list-unstyled mb-0">
+                  <li>
+                    <a href="#">1st</a>
+                  </li>
+                  <li>
+                    <a href="#">2nd</a>
+                  </li>
+                  <li>
+                    <a href="#">3rd</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>

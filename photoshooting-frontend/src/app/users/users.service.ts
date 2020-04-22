@@ -14,7 +14,7 @@ export class UsersService {
 
   private backend_url = 'http://localhost:8080/';
 
-  constructor(private httpClient: HttpClient, private localStoraqeService: LocalStorageService) {
+  constructor(private httpClient: HttpClient, private localStorageService: LocalStorageService) {
   }
 
   register(registration: Registration): Observable<any> {
@@ -24,13 +24,17 @@ export class UsersService {
   login(login: Login): Observable<boolean> {
     console.log(login);
     return this.httpClient.post<JwtAutResponse>(this.backend_url + 'login', login).pipe(map(data => {
-      this.localStoraqeService.store('authenticationToken', data.authenticationToken);
-      this.localStoraqeService.store('username', data.username);
+      this.localStorageService.store('authenticationToken', data.authenticationToken);
+      this.localStorageService.store('username', data.username);
       return true;
     }));
   }
 
-  isAuthenticated(): Boolean{
-    return this.localStoraqeService.retrieve('username');
+  isAuthenticated(): boolean{
+    return this.localStorageService.retrieve('username') != null;
+  }
+
+  getUsername(): string{
+    return this.localStorageService.retrieve('username');
   }
 }
